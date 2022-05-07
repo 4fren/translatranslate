@@ -68,8 +68,6 @@ function toTranslate(){
                     closeBox_translating();
                     clearInterval(timer1);
 
-                    console.log(results);
-                    console.log(results.length)
                     localStorage.setItem('result_history', results);
                 };
             },100);
@@ -90,8 +88,7 @@ function toTranslate(){
                     for (var i=0; i<elements.length; i++){
                         results.push(elements[i].textContent);
                     };
-                    console.log(results);
-                    console.log(results.length)
+
                     localStorage.setItem('result_history', results);
                 };
             },1000);
