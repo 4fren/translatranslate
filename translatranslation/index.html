@@ -17,57 +17,76 @@
         <meta http-equiv="X-UA-Compatible" content="IE-edge">
     </head>
     <body style="text-align: center;">
-        <div id=div_input>
-            <h2>一気に翻訳します。</h2>
-            <select id="selectNumber" name="times" onchange="setting()">
-                <option id="op1" value=1>1</option>
-                <option id="op2" value=2>2</option>
-                <option id="op3" value=3>3</option>
-                <option id="op4" value=4>4</option>
-                <option id="op5" value=5>5</option>
-                <option id="op6" value=6>6</option>
-                <option id="op7" value=7>7</option>
-                <option id="op8" value=8>8</option>
-                <option id="op9" value=9>9</option>
-                <option id="op10" value=10>10</option>
-            </select>
+        <header id="header">
+           <h2>一気に翻訳します。</h2>
+            <div id=div_input>
+                <select id="selectNumber" name="times" onchange="setting()">
+                    <option id="op1" value=1>1</option>
+                    <option id="op2" value=2>2</option>
+                    <option id="op3" value=3>3</option>
+                    <option id="op4" value=4>4</option>
+                    <option id="op5" value=5>5</option>
+                    <option id="op6" value=6>6</option>
+                    <option id="op7" value=7>7</option>
+                    <option id="op8" value=8>8</option>
+                    <option id="op9" value=9>9</option>
+                    <option id="op10" value=10>10</option>
+                </select>
+                <br>
+                <input id="radio1" name="radio" type="radio" value="0" onclick="setting()" checked="true"><label id="label1" for="radio1"></label>
+                <input id="radio2" name="radio" type="radio" value="1" onclick="setting()"><label id="label2" for="radio2"></label>
+                <br>
+                <textarea id="wordInput" required name="word" maxlength="1500" spellcheck="true" autocomplete="on" required translate="no"></textarea>
+                <button id="inputButton" type="button">音声入力</button>
+            </div>
+            <button id="randomButton" type="button" onclick="randomSetting()">ランダム</button>
+            <button id="translateButton" type="button" onclick="toTranslate()">翻訳</button>
+            <button id="historyButton" type="button" onclick="history()">前回の結果</button>
             <br>
-            <input id="radio1" name="radio" type="radio" value="0" onclick="setting()" checked="true"><label id="label1" for="radio1"></label>
-            <input id="radio2" name="radio" type="radio" value="1" onclick="setting()"><label id="label2" for="radio2"></label>
-            <br>
-            <textarea id="wordInput" required name="word" maxlength="1500" spellcheck="true" autocomplete="on" required translate="no"></textarea>
-            <button id="inputButton" type="button" onclick="voiceInput()">音声入力</button>
-            <br>
-            <P id="temporaryBox_successCopy" style="display: none;">コピーしました。</p>
-            <p id="temporaryBox_translating" style="display: none;">翻訳しています……</p>
-            <p id="temporaryBox_confirmation" style="display: none;">エラーが発生しました。もう一度お試しください。</p>
+            <P id="temporaryBox_message"></p>
+        </header>
+        <div id="div_main">
+            <div id="div_div"></div>
         </div>
-        <button id="randomButton" type="button" onclick="randomSetting()">ランダム</button>
-        <div id="div_div"></div>
-        <button id="translateButton" type="button" onclick="toTranslate()">翻訳</button>
-        <br>
-        <button id="historyButton" type="button" onclick="history()">前回の結果</button>
+
+        <div id="mask" class="hidden"></div>
+        <section id="modal" class="hidden">
+            <p>音声入力に使用する言語を選択</p>
+            <p>（デフォルトはブラウザの使用言語）</p>
+            <select id="selectbox10" class="selectboxes select_voiceInput"></select>
+            <div id="close">
+                決定
+            </div>
+        </section>
+
+        <footer id="footer">
+            <ul>
+                <li><a href="index.html">カテゴリ1</a></li>
+                <li><a>|</a></li>
+                <li><a href="index.html">カテゴリ2</a></li>
+                <li><a>|</a></li>
+                <li><a href="index.html">カテゴリ3</a></li>
+                <li><a>|</a></li>
+                <li><a href="index.html">カテゴリ4</a></li>
+                <li><a>|</a></li>
+                <li><a href="index.html">カテゴリ5</a></li>
+            </ul>
+        </footer>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/glottologist"></script>
         <script src="func's.js"></script>
         <style>
-            #div_input{
-               {#  position: fixed;
-                top: 8;
-                left: 25%;
-                right: 25%; #}
+            #div_main{
+                position: relative;
+                top: 40%;
+                padding-bottom: 10%;
             }
 
             #selectNumber{
                 width: 120px;
                 font-size: 120%;
                 margin-bottom: 10px;
-            }
-
-            #inputButton{
-                {# position: relative;
-                top: -8px; #}
             }
 
             textarea {
@@ -78,21 +97,11 @@
                 min-height: 65px;
                 max-height: 300px;
                 margin-top: 10px;
-                {# margin-left: 72px; #}
             }
 
             textarea:focus {
                 border: solid 2px;
                 outline: 0;
-            }
-
-            #randomButton{
-                margin-right: 27%;
-                margin-bottom: 10px;
-            }
-
-            #div_div{
-                {# margin-top: 290px; #}
             }
 
             .div_selectbox{
@@ -107,7 +116,7 @@
             }
 
             .selectboxes{
-                width: 120px;
+                width: 100px;
             }
 
             .rightArrowP{
@@ -125,6 +134,7 @@
                 border-radius: 2px;
                 width: 25%;
                 min-width: 8%;
+                z-index: 1001;
             }
 
             .speakButton{
@@ -135,8 +145,85 @@
                 margin-left: 1%;
             }
 
-            #historyButton{
-                margin-top: 12px;
+            #close {
+                cursor: pointer;
+                width: 200px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                text-align: center;
+                padding: 12px;
+                margin: 16px auto 0;
+                background: #4caf50;
+                color: white;
+                position: relative;
+                top: 30%;
+            }
+
+            #mask {
+                background: rgba(0, 0, 0, 0.4);
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                left: 0;
+                z-index: 1002;
+            }
+
+            #modal {
+                background: #fff;
+                color: #555;
+                width: 300px;
+                padding: 40px;
+                border-radius: 4px;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                -webkit-transform: translate(-50%, -50%);
+                -ms-transform: translate(-50%, -50%);
+                margin: 0 auto;
+                z-index: 1002;
+                transition: 0.4s;
+
+            }
+
+            #mask.hidden {
+                display: none;
+            }
+
+            #modal.hidden {
+                display: none;
+            }
+
+            header#header {
+                position: fixed;
+                width: 100%;
+                background-color: white;
+                z-index: 1002;
+                top: 0;
+                border-bottom: solid 1px lightgray;
+            }
+
+            #footer {
+                position: fixed;
+                border-top: solid 1px lightgray;
+                bottom: 0;
+                width: 100%;
+                background-color: white;
+                z-index: 1002;
+            }
+
+            #footer ul {
+                text-align: center;
+            }
+
+            #footer ul li {
+                padding: 0 4px;
+                display: inline;
+            }
+
+            #footer p {
+                text-align: center;
             }
         </style>
     </body>
