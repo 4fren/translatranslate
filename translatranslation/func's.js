@@ -682,14 +682,6 @@ function speak(lang, sentence){
 
 var lang;
 
-console.log(navigator.language);
-
-
-window.onload = function() {
-    lang = navigator.language;
-    document.getElementById("selectbox10").value = lang;
-};
-
 function voiceInput(){
     SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
 
