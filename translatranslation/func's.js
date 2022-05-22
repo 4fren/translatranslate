@@ -142,54 +142,78 @@ var timerId3;
 
 // ボックスを表示して、タイマーを開始
 function showBox_successCopy(){
-    document.getElementById("temporaryBox_successCopy").style.display = "block"; // ボックスを表示
+    document.getElementById("temporaryBox_message").innerText = "コピーしました。";
     timerId1 = setTimeout(closeBox_successCopy, 2000); // タイマーを開始
-    var copyButton = document.getElementsByClassName("copyButton");
-    for (var i=0; i<copyButton.length; i++) {
-        copyButton[i].disabled = true;// 表示用ボタンを無効化
-    };
-    document.getElementById("randomButton").disabled = true;
+    
+    disabledTrue();
 };
 
 // ボックスを消して、タイマーを終了
 function closeBox_successCopy(){
-    document.getElementById("temporaryBox_successCopy").style.display = "none"; // ボックスを消す
+    document.getElementById("temporaryBox_message").innerText = "";
     clearTimeout(timerId1); // タイマーを終了
-    var copyButton = document.getElementsByClassName("copyButton");
-    for (var i=0; i<copyButton.length; i++) {
-        copyButton[i].disabled = false;// 表示用ボタンを有効化
-    };
-    document.getElementById("randomButton").disabled = false;
+    
+    disabledFalse();
 };
 
 // ボックスを表示して、タイマーを開始
 function showBox_translating(){
-    document.getElementById("temporaryBox_translating").style.display = "block"; // ボックスを表示
+    document.getElementById("temporaryBox_message").innerText = "翻訳しています……";
     //timerId2 = setTimeout(closeBox_translating, 20000); // タイマーを開始
-    var all_button = document.getElementsByTagName("button");
-    for (var i=0; i<all_button.length; i++) {
-        all_button[i].style.display = "none";// 全てのボタンを無効化
-    };
+    
+    disabledTrue();
 };
 
 // ボックスを消して、タイマーを終了
 function closeBox_translating(){
-    document.getElementById("temporaryBox_translating").style.display = "none"; // ボックスを消す
+    document.getElementById("temporaryBox_message").innerText = "";
     //clearTimeout(timerId2); // タイマーを終了
-    var all_button = document.getElementsByTagName("button");
-    for (var i=0; i<all_button.length; i++) {
-        all_button[i].style.display = "inline-block";// 全てのボタンを有効化
-    };
+    
+    disabledFalse();
 };
 
 function showBox_confirmation(){
-    document.getElementById("temporaryBox_confirmation").style.display = "block"; // ボックスを表示
+    document.getElementById("temporaryBox_message").innerText = "エラーが発生しました。もう一度お試しください。";
     timerId3 = setTimeout(closeBox_confirmation, 2000); // タイマーを開始
 };
 
 function closeBox_confirmation(){
-    document.getElementById("temporaryBox_confirmation").style.display = "none"; // ボックスを消す
+    document.getElementById("temporaryBox_message").innerText = "";
     clearTimeout(timerId3); // タイマーを終了
+};
+
+function disabledTrue(){
+    var all_button = document.getElementsByTagName("button");
+    for (var i=0; i<all_button.length; i++) {
+        all_button[i].disabled = true;// 全てのボタンを無効化
+    };
+
+    var all_select = document.getElementsByTagName("select");
+    for (var i=0; i<all_select.length; i++) {
+        all_select[i].disabled = true;
+    };
+
+    var all_input = document.getElementsByTagName("input");
+    for (var i=0; i<all_input.length; i++){
+        all_input[i].disabled = true;
+    };
+};
+
+function disabledFalse(){
+    var all_button = document.getElementsByTagName("button");
+    for (var i=0; i<all_button.length; i++) {
+        all_button[i].disabled = false;// 全てのボタンを有効化
+    };
+
+    var all_select = document.getElementsByTagName("select");
+    for (var i=0; i<all_select.length; i++) {
+        all_select[i].disabled = false;
+    };
+
+    var all_input = document.getElementsByTagName("input");
+    for (var i=0; i<all_input.length; i++){
+        all_input[i].disabled = false;
+    };
 };
 
 function scroll_control(event) {
@@ -252,7 +276,9 @@ function handle(delta) {
             ddl.selectedIndex -= 1;
             };
         };
-        resetResultP(thisAttrId);
+        if (ddl.id != "selectbox10"){
+            resetResultP(thisAttrId);
+        };
     } else {
         return_scroll();
     };
@@ -591,7 +617,7 @@ function resetResultP(Id){
     var currentSelectedLanguage = document.getElementsByClassName("selectboxes");
     var currentResultP = document.getElementsByClassName("ps");
     
-    for (var i=0; i<currentSelectedLanguage.length; i++) {
+    for (var i=0; i<currentSelectedLanguage.length-1; i++) {
         if (currentSelectedLanguage[i].id == Id) {
             //console.log(i);
             currentResultP[i].innerText = "";
@@ -654,15 +680,26 @@ function speak(lang, sentence){
     };
 };
 
+var lang;
+
+console.log(navigator.language);
+
+
+window.onload = function() {
+    lang = navigator.language;
+    document.getElementById("selectbox10").value = lang;
+};
+
 function voiceInput(){
     SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
+
     if ('SpeechRecognition' in window) {
         var wordInput = document.getElementById("wordInput");
 
         // ユーザのブラウザは音声合成に対応しています。
         const recognition = new SpeechRecognition();
 
-        var lang = navigator.language;
+        
         //console.log('language : ', lang);
 
         //recognition.continuous = true;
@@ -672,13 +709,40 @@ function voiceInput(){
         recognition.onresult = (event) => {
             //alert(event.results[0][0].transcript);
             wordInput.innerText = event.results[0][0].transcript;
-        }
+        };
 
         recognition.start();
     } else {
-    // ユーザのブラウザは音声合成に対応していません。
-    alert("このブラウザは音声入力に対応していません。😭");
+        // ユーザのブラウザは音声合成に対応していません。
+        alert("このブラウザは音声入力に対応していません。😭");
     };
 };
+
+document.getElementById("close").addEventListener('click', function(){
+    lang = document.getElementById("selectbox10").value;
+    console.log(lang);
+
+    voiceInput();
+});
+
+const open = document.getElementById('inputButton');
+const close = document.getElementById('close');
+const modal = document.getElementById('modal');
+const mask = document.getElementById('mask');
+
+open.addEventListener('click', function () {
+    modal.classList.remove('hidden');
+    mask.classList.remove('hidden');
+});
+
+close.addEventListener('click', function () {
+    modal.classList.add('hidden');
+    mask.classList.add('hidden');
+});
+
+mask.addEventListener('click', function () {
+    modal.classList.add('hidden');
+    mask.classList.add('hidden');
+});
 
 setting();
