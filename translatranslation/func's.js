@@ -93,6 +93,8 @@ function toTranslate(){
                 };
             },1000);
         };
+    }else{
+        showBox_blanc();
     };
 };
 
@@ -139,6 +141,7 @@ function copy(button_id){
 var timerId1;
 var timerId2;
 var timerId3;
+var timerId4;
 
 // ボックスを表示して、タイマーを開始
 function showBox_successCopy(){
@@ -180,6 +183,16 @@ function showBox_confirmation(){
 function closeBox_confirmation(){
     document.getElementById("temporaryBox_message").innerText = "";
     clearTimeout(timerId3); // タイマーを終了
+};
+
+function showBox_blanc(){
+    document.getElementById("temporaryBox_message").innerText = "文字が入力されていません。";
+    timerId4 = setTimeout(closeBox_confirmation, 2000); // タイマーを開始
+};
+
+function closeBox_blanc(){
+    document.getElementById("temporaryBox_message").innerText = "";
+    clearTimeout(timerId4); // タイマーを終了
 };
 
 function disabledTrue(){
